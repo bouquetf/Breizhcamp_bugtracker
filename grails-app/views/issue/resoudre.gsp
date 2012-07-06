@@ -13,27 +13,28 @@
 </head>
 
 <body>
-<g:form action="soumettre_resoudre">
-    <g:hiddenField name="id" value="${issue.id}"/>
-    <fieldset>
-        <div id="demandeur">
-            <label for="demandeur">Demandeur</label>
-            <g:textField name="email" readonly="true" value="${issue.demandeur}"/>
+<g:form action="soumettre_resoudre" class="well span7">
+    <fieldset class="span6">
+        <legend>Résoudre l'issue ${issue.ident}</legend>
+        <g:hiddenField name="id" value="${issue.id}"/>
+
+        <div>
+            <label for="email">Demandeur</label>
+            <g:textField name="email" class="input-xxlarge" readonly="true" value="${issue.demandeur}"/>
         </div>
 
-        <div id="titre">
+        <div>
             <label for="titre">Titre</label>
-            <g:textField name="titre" readonly="true" value="${issue.titre}"/>
+            <g:textField name="titre" class="input-xxlarge" readonly="true" value="${issue.titre}"/>
         </div>
 
-        <div id="description">
+        <div>
             <label for="description">Description</label>
-            <g:textArea name="description" readonly="true" value="${issue.description}" cols="80" rows="5"/>
+            <g:textArea name="description" class="input-xxlarge" readonly="true"
+                        value="${issue.description}" cols="80" rows="5"/>
         </div>
-    </fieldset>
 
-    <fieldset class="buttons">
-        <g:submitButton name="Résolue"/>
+        <g:submitButton name="Résolue" class="btn btn-primary" />
     </fieldset>
 </g:form>
 

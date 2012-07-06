@@ -1,34 +1,33 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: bouquetf
-  Date: 16/06/12
-  Time: 11:39
-  To change this template use File | Settings | File Templates.
---%>
+<!DOCTYPE html>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
-<html>
+<html lang="fr">
 <head>
     <title>Breizhcamp Issue Tracker - <g:layoutTitle/></title>
+    <r:require modules="bootstrap"/>
     <g:layoutHead/>
+    <r:layoutResources/>
 </head>
 
 <body>
 
-<div id="menu">
-    <ul>
-        <li><g:link action="nouvelle_issue">Nouvelle issue</g:link></li>
-        <li><g:link action="aresoudre">A résoudre</g:link></li>
-        <li><g:link action="aevaluer">A évaluer</g:link></li>
-        <li><g:link action="aassigner">A assigner</g:link></li>
-        <li><g:link action="list">Admin</g:link></li>
-    </ul>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span2" style="margin-top:70px;">
+            <ul class="nav nav-tabs nav-stacked">
+                <li><g:link action="nouvelle_issue">Nouvelle issue</g:link></li>
+                <li><g:link action="aresoudre">A résoudre</g:link></li>
+                <li><g:link action="aevaluer">A évaluer</g:link></li>
+                <li><g:link action="aassigner">A assigner</g:link></li>
+                <li><g:link action="list">Admin</g:link></li>
+            </ul>
+        </div>
 
+        <div class="span10" style="margin-top: 70px">
+            <g:layoutBody/>
+            <r:layoutResources/>
+        </div>
+    </div>
 </div>
-
-<div id="content">
-    <g:layoutBody/>
-</div>
-
 </body>
 </html>

@@ -1,6 +1,5 @@
 package breizhcamp
 
-import org.ow2.bonita.facade.QueryDefinitionAPI
 import org.ow2.bonita.facade.QueryRuntimeAPI
 import org.ow2.bonita.facade.RuntimeAPI
 import org.ow2.bonita.facade.uuid.ActivityInstanceUUID
@@ -141,7 +140,7 @@ class IssueController {
                     .toArray()[0].getUUID()
         runtimeAPI.startTask(activityInstanceUUID, true)
         issue.setDeveloppeur(params.developpeur)
-        issue.setEtat(params, 'RESOLUE')
+        issue.setEtat('RESOLUE')
         issue.save(flush: true)
         runtimeAPI.finishTask(activityInstanceUUID, true)
         loginContext.logout();

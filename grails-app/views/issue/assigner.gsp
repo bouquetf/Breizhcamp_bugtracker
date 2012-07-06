@@ -13,31 +13,31 @@
 </head>
 
 <body>
-<g:form action="soumettre_assigner">
-    <g:hiddenField name="id" value="${issue.id}"/>
-    <fieldset>
-        <div id="demandeur">
-            <label for="demandeur">Demandeur</label>
-            <g:textField name="email" readonly="true" value="${issue.demandeur}"/>
+<g:form action="soumettre_assigner" class="well span7">
+    <fieldset class="span6">
+        <legend>Assigner un développeur à l'issue ${issue.ident}</legend>
+        <g:hiddenField name="id" value="${issue.id}"/>
+
+        <div class="control-group">
+            <label for="email">Demandeur</label>
+            <g:textField name="email" class="input-xxlarge" readonly="true" value="${issue.demandeur}"/>
         </div>
 
-        <div id="titre">
+        <div class="control-group">
             <label for="titre">Titre</label>
-            <g:textField name="titre" readonly="true" value="${issue.titre}"/>
+            <g:textField name="titre" class="input-xxlarge" readonly="true" value="${issue.titre}"/>
         </div>
 
-        <div id="description">
+        <div class="control-group">
             <label for="description">Description</label>
-            <g:textArea name="description" readonly="true" value="${issue.description}" cols="80" rows="5"/>
+            <g:textArea name="description" class="input-xxlarge" readonly="true" value="${issue.description}" cols="80" rows="5"/>
         </div>
-    </fieldset>
 
-    <fieldset class="buttons">
-        <div id="developpeur">
+        <div class="control-group">
             <label for="developpeur">Développeur assigné :</label>
-            <g:textField name="developpeur"/>
+            <g:textField name="developpeur" class="input-xxlarge" />
         </div>
-        <g:submitButton name="Assigner"/>
+        <g:submitButton name="Assigner" class="btn btn-primary" />
     </fieldset>
 
 </g:form>

@@ -8,15 +8,29 @@
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
+
 <head>
     <title>Issues à assigner</title>
 </head>
 
 <body>
-<ul>
+
+<table class="table span8">
+    <thead>
+    <tr>
+        <th class="span2">Id</th>
+        <th class="span6">Title</th>
+    </tr>
+    </thead>
+    <tbody>
     <g:each in="${issueList}" var="issue">
-        <li><g:link action="assigner" params="${[id: issue.id]}">${issue.titre}</g:link></li>
+        <tr>
+            <td><g:link action="assigner" params="${[id: issue.id]}">${issue.ident}</g:link></td>
+            <td>${issue.titre}</td>
+        </tr>
     </g:each>
-</ul>
+    </tbody>
+</table>
+
 </body>
 </html>

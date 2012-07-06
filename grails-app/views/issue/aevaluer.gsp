@@ -12,11 +12,22 @@
 </head>
 
 <body>
-<ul>
-    <g:each in="${issueList}" var="issue">
-        <li><g:link action="evaluer" params="${[id: issue.id]}">${issue.titre}</g:link></li>
-    </g:each>
-</ul>
 
+    <table class="table span8">
+        <thead>
+        <tr>
+            <th class="span2">Id</th>
+            <th class="span6">Title</th>
+        </tr>
+        </thead>
+        <tbody>
+        <g:each in="${issueList}" var="issue">
+            <tr>
+                <td><g:link action="evaluer" params="${[id: issue.id]}">${issue.ident}</g:link></td>
+                <td>${issue.titre}</td>
+            </tr>
+        </g:each>
+        </tbody>
+    </table>
 </body>
 </html>
