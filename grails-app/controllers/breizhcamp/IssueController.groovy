@@ -12,6 +12,7 @@ import javax.security.auth.login.LoginContext
 
 class IssueController {
     def scaffold = true
+    def issueService
 
     def index() {
         redirect(action: "aresoudre", params: params)
@@ -27,17 +28,7 @@ class IssueController {
             return
         }
 
-        LoginContext loginContext = new LoginContext("BonitaStore", new SimpleCallbackHandler("admin",""));
-        loginContext.login();
-        RuntimeAPI runtimeAPI = AccessorUtil.getRuntimeAPI();
-        ProcessDefinitionUUID processDefinitionUUID = new ProcessDefinitionUUID("Suivi_d_issue","1.0");
-        HashMap<String, Object> parametres = new HashMap<String, Object>();
-        parametres.put('demandeur', issue.demandeur);
-        ProcessInstanceUUID processInstanceUUID = runtimeAPI.instantiateProcess(processDefinitionUUID, parametres);
-        loginContext.logout();
-
-        issue.ident = processInstanceUUID.getValue()
-        issue.save(flush: true)
+        issueService.startProcess('admin', issue, ['demandeur'])
 
         redirect(action: "aresoudre")
     }
@@ -53,20 +44,7 @@ class IssueController {
     def valider_evaluation() {
         def issue = Issue.findById(params.id)
 
-        LoginContext loginContext = new LoginContext("BonitaStore", new SimpleCallbackHandler("admin",""));
-        loginContext.login();
-        RuntimeAPI runtimeAPI = AccessorUtil.getRuntimeAPI();
-        QueryRuntimeAPI queryRuntimeAPI = AccessorUtil.getQueryRuntimeAPI()
-
-        ActivityInstanceUUID activityInstanceUUID =
-            queryRuntimeAPI.getActivityInstances(new ProcessInstanceUUID(issue.ident), 'Evaluer_la_criticite')
-                    .toArray()[0].getUUID()
-        runtimeAPI.startTask(activityInstanceUUID, true)
-        issue.setEtat('AASSIGNER')
-        issue.save(flush: true)
-        runtimeAPI.setProcessInstanceVariable(new ProcessInstanceUUID(issue.ident), 'decision', 'Oui')
-        runtimeAPI.finishTask(activityInstanceUUID, true)
-        loginContext.logout();
+        issueService.ChangeEtat('admin',issue, 'Evaluer_la_criticite', 'AASSIGNER', [decision:'Oui'])
 
         redirect(action: 'aresoudre')
     }
@@ -74,19 +52,7 @@ class IssueController {
     def refuser_evaluation() {
         def issue = Issue.findById(params.id)
 
-        LoginContext loginContext = new LoginContext("BonitaStore", new SimpleCallbackHandler("admin",""));
-        loginContext.login();
-        RuntimeAPI runtimeAPI = AccessorUtil.getRuntimeAPI();
-        QueryRuntimeAPI queryRuntimeAPI = AccessorUtil.getQueryRuntimeAPI()
-        ActivityInstanceUUID activityInstanceUUID =
-            queryRuntimeAPI.getActivityInstances(new ProcessInstanceUUID(issue.ident), 'Evaluer_la_criticite')
-                    .toArray()[0].getUUID()
-        runtimeAPI.startTask(activityInstanceUUID, true)
-        issue.setEtat('REFUSEE')
-        issue.save(flush: true)
-        runtimeAPI.setProcessInstanceVariable(new ProcessInstanceUUID(issue.ident), 'decision', 'Non')
-        runtimeAPI.finishTask(activityInstanceUUID, true)
-        loginContext.logout();
+        issueService.ChangeEtat('admin', issue, 'Evaluer_la_criticite', 'REFUSEE', [decision: 'Non'])
 
         redirect(action: 'aresoudre')
     }
@@ -102,20 +68,8 @@ class IssueController {
     def soumettre_assigner() {
         def issue = Issue.findById(params.id)
 
-        LoginContext loginContext = new LoginContext("BonitaStore", new SimpleCallbackHandler("admin",""));
-        loginContext.login();
-        RuntimeAPI runtimeAPI = AccessorUtil.getRuntimeAPI();
-        QueryRuntimeAPI queryRuntimeAPI = AccessorUtil.getQueryRuntimeAPI()
-        ActivityInstanceUUID activityInstanceUUID =
-            queryRuntimeAPI.getActivityInstances(new ProcessInstanceUUID(issue.ident), 'Affecter_un_developpeur')
-                    .toArray()[0].getUUID()
-        runtimeAPI.startTask(activityInstanceUUID, true)
-        issue.setDeveloppeur(params.developpeur)
-        issue.setEtat('ARESOUDRE')
-        issue.save(flush: true)
-        runtimeAPI.setProcessInstanceVariable(new ProcessInstanceUUID(issue.ident), 'developpeur', issue.developpeur)
-        runtimeAPI.finishTask(activityInstanceUUID, true)
-        loginContext.logout();
+        issueService.ChangeEtat('admin', issue, 'Affecter_un_developpeur', 'ARESOUDRE',
+                [developpeur: params.developpeur])
 
         redirect(action: 'aresoudre')
     }
@@ -131,19 +85,7 @@ class IssueController {
     def soumettre_resoudre() {
         def issue = Issue.findById(params.id)
 
-        LoginContext loginContext = new LoginContext("BonitaStore", new SimpleCallbackHandler("admin",""));
-        loginContext.login();
-        RuntimeAPI runtimeAPI = AccessorUtil.getRuntimeAPI();
-        QueryRuntimeAPI queryRuntimeAPI = AccessorUtil.getQueryRuntimeAPI()
-        ActivityInstanceUUID activityInstanceUUID =
-            queryRuntimeAPI.getActivityInstances(new ProcessInstanceUUID(issue.ident), 'Resoudre_l_issue')
-                    .toArray()[0].getUUID()
-        runtimeAPI.startTask(activityInstanceUUID, true)
-        issue.setDeveloppeur(params.developpeur)
-        issue.setEtat('RESOLUE')
-        issue.save(flush: true)
-        runtimeAPI.finishTask(activityInstanceUUID, true)
-        loginContext.logout();
+        issueService.ChangeEtat('admin', issue, 'Resoudre_l_issue', 'RESOLUE', [:])
 
         redirect(action: 'aresoudre')
     }
